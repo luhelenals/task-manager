@@ -1,4 +1,9 @@
+using api.data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -10,6 +15,10 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<ApplicationDBContext>(options => {
+    options.UseSqlite(connectionString);
+});
 
 var app = builder.Build();
 
