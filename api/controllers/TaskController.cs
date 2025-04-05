@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using api.data;
 using api.dtos;
@@ -15,6 +16,7 @@ namespace api.controllers
     public class TaskController : ControllerBase
     {
         private readonly ApplicationDBContext _context;
+
         public TaskController(ApplicationDBContext context)
         {
             _context = context;
@@ -25,8 +27,8 @@ namespace api.controllers
         {
             // Obter tasks do banco de dados em formato de lista
             var tasks = _context.Tasks
-                .ToList()
-                .Select(i => i.ToTaskDTO());
+                .Select(i => i.ToTaskDTO())
+                .ToList();
 
             return Ok(tasks);
         }
@@ -34,15 +36,15 @@ namespace api.controllers
         [HttpGet("{id}")]
         public IActionResult GetById([FromRoute] int id)
         {
-            // Econtrar task do banco de dados baseado no Id
+            // Encontrar task do banco de dados baseado no Id
             var task = _context.Tasks
-                .ToList()
+                .Where(t => t.Id == id)
                 .Select(i => i.ToTaskDTO())
-                .FirstOrDefault(r => r.Id == id);
+                .FirstOrDefault();
 
-            if(task == null)
-                return NotFound();
-            
+            if (task == null)
+                return new ObjectResult("Tarefa não encontrada") { StatusCode = 403 };
+
             return Ok(task);
         }
 
@@ -64,12 +66,16 @@ namespace api.controllers
         {
             var task = _context.Tasks.FirstOrDefault(r => r.Id == id);
             if (task == null)
-                return NotFound();
+                return NotFound(new { message = "Tarefa não encontrada." });
 
+            // Update Titulo, Completo e SLA (caso necessário)
             if (!string.IsNullOrEmpty(taskDTO.Titulo) && taskDTO.Titulo != task.Titulo)
                 task.Titulo = taskDTO.Titulo;
 
-            if (task.SlaHoras != taskDTO.SlaHoras)
+            if (taskDTO.Completo != task.Completo)
+                task.Completo = taskDTO.Completo;
+            
+            if (taskDTO.SlaHoras != task.SlaHoras)
                 task.SlaHoras = taskDTO.SlaHoras;
 
             _context.SaveChanges();
@@ -77,21 +83,17 @@ namespace api.controllers
             return Ok(task.ToTaskDTO());
         }
 
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteTask([FromRoute] int id)
         {
-            // Obter task do banco de dados pelo Id
-            var task = _context.Tasks
-                .FirstOrDefault(r => r.Id == id);
-
+            var task = _context.Tasks.FirstOrDefault(r => r.Id == id);
             if (task == null)
-                return NotFound();
+                return NotFound(new { message = "Tarefa não encontrada." });
 
-            // Remove task e salva alterações no banco de dados
             _context.Tasks.Remove(task);
             _context.SaveChanges();
 
-            return GetTasks();
+            return NoContent();
         }
     }
 }

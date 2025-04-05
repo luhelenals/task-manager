@@ -10,5 +10,7 @@ namespace api.models
         public int Id { get; set; }
         public string Titulo { get; set; } = string.Empty;
         public double SlaHoras { get; set; }
+        public bool Completo { get; set; }
+        public DateTime HoraCriada { get; set; }
     }
 }

@@ -15,7 +15,9 @@ namespace api.mappers
             {
                 Id = task.Id,
                 Titulo = task.Titulo,
-                SlaHoras = task.SlaHoras
+                SlaHoras = task.SlaHoras,
+                Completo = task.Completo,
+                HoraCriada = task.HoraCriada
             };
         }
 
@@ -24,7 +26,9 @@ namespace api.mappers
             return new TaskModel
             {
                 Titulo = task.Titulo,
-                SlaHoras = task.SlaHoras
+                SlaHoras = task.SlaHoras,
+                Completo = task.Completo,
+                HoraCriada = DateTime.UtcNow
             };
         }
     }
