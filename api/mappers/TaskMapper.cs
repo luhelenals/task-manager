@@ -19,11 +19,10 @@ namespace api.mappers
             };
         }
 
-        public static TaskModel ToIngredienteFromCreateDto(this TaskDTO task)
+        public static TaskModel ToTaskFromRequestDTO(this TaskRequestDTO task)
         {
             return new TaskModel
             {
-                Id = task.Id,
                 Titulo = task.Titulo,
                 SlaHoras = task.SlaHoras
             };
