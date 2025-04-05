@@ -225,3 +225,4 @@ C:\Users\luiza\source\repos\task_manager\api\bin\Debug\net9.0\runtimes\win-arm\n
 C:\Users\luiza\source\repos\task_manager\api\bin\Debug\net9.0\runtimes\win-arm64\native\e_sqlite3.dll
 C:\Users\luiza\source\repos\task_manager\api\bin\Debug\net9.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\luiza\source\repos\task_manager\api\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\luiza\source\repos\task_manager\api\obj\Debug\net9.0\task_manager.sourcelink.json
